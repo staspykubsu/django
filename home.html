@@ -1,0 +1,116 @@
+{% extends 'space_app/base.html' %}
+
+{% block title %}Миссии{% endblock %}
+
+{% block content %}
+
+<h2>Миссии</h2>
+
+{% if missions %}
+    <div class="missions-list">
+        {% for mission in missions %}
+            <div class="mission-card">
+                <h3>{{ mission.name }}</h3>
+                <p><strong>Корабль:</strong> {{ mission.spaceship.name }}</p>
+                <p><strong>Направление:</strong> {{ mission.destination }}</p>
+                <p><strong>Дата запуска:</strong> {{ mission.launch_date|date:"d.m.Y H:i" }}</p>
+                <p><strong>Статус:</strong> {{ mission.get_status_display }}</p>
+                {% if mission.astronauts.all %}
+                    <p><strong>Экипаж:</strong> {{ mission.astronauts.count }} человек</p>
+                {% endif %}
+                <div class="card-footer">
+                    <a href="{% url 'mission_detail' mission.pk %}" class="button detail-button">
+                        Подробнее
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        Пока нет созданных миссий. 
+        <a href="{% url 'mission_create' %}" class="button submit-button">
+            Создать первую миссию
+        </a>
+    </div>
+{% endif %}
+
+<style>
+    .missions-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .mission-card {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .mission-card h3 {
+        margin-top: 0;
+        color: #222;
+    }
+    
+    .mission-card p {
+        margin: 8px 0;
+        color: #555;
+    }
+    
+    .card-footer {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+    
+    .empty-state {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 40px;
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    /* Стили для кнопок */
+    .button {
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        border: none;
+        display: inline-block;
+        transition: all 0.3s;
+    }
+    
+    .detail-button {
+        background: #222;
+        color: white;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .detail-button:hover {
+        background: #222;
+    }
+    
+    .submit-button {
+        background: #222;
+        color: white;
+        padding: 12px 24px;
+        font-size: 15px;
+    }
+    
+    .submit-button:hover {
+        background: #222;
+    }
+</style>
+
+{% endblock %}
